@@ -1,0 +1,95 @@
+/*Projeto Dashboard de Vendas de E-commerce - Télos- Trilha de Dados*/
+/*Projetado por: Eric Pimentel - 02.2025*/
+/*Queries Usadas no projeto_vendas*/
+
+
+/*Criando a tabela metricas_dashboard*/
+CREATE OR REPLACE TABLE `projeto-vendas-influenciador.projeto_vendas.metricas_dashboard` AS
+SELECT
+Mes,
+SUM(Vendas_Totais) AS Receita_Total,
+ROUND(AVG(SAFE_CAST(Primeira_Avaliacao AS BIGNUMERIC)), 2) AS Media_Avaliacao,
+COUNT(DISTINCT ID_Pedido) AS Total_Pedidos,
+SUM(CASE WHEN Envio_Internacional = 1 THEN 1 ELSE 0 END) AS Envios_Internacionais,
+SUM(CASE WHEN Envio_Internacional = 0 THEN 1 ELSE 0 END) AS Envios_Nacionais
+FROM (
+  SELECT
+  *,
+  FIRST_VALUE(Avaliacao) OVER (PARTITION BY ID_Pedido ORDER BY Data_Pedido ASC) AS Primeira_Avaliacao  -- Ordenação explícita!
+  FROM
+  `projeto-vendas-influenciador.projeto_vendas.vendas_tratadas_v2`
+) AS vendas_com_primeira_avaliacao
+GROUP BY 1
+
+
+SELECT
+MIN(SAFE_CAST(Avaliacao AS BIGNUMERIC)) AS Min_Avaliacao,
+MAX(SAFE_CAST(Avaliacao AS BIGNUMERIC)) AS Max_Avaliacao,
+AVG(SAFE_CAST(Avaliacao AS BIGNUMERIC)) AS Media_Avaliacao,
+STDDEV(SAFE_CAST(Avaliacao AS BIGNUMERIC)) AS Desvio_Padrao_Avaliacao
+FROM `projeto-vendas-influenciador.projeto_vendas.vendas_tratadas_v2`
+
+
+/*Criando a tabela vendas_por_categoria*/
+CREATE OR REPLACE TABLE `projeto-vendas-influenciador.projeto_vendas.vendas_por_categoria` AS
+SELECT
+Mes,
+Categoria_Produto,
+SUM(Vendas_Totais) AS Total_Vendas_Categoria
+FROM
+`projeto-vendas-influenciador.projeto_vendas.vendas_tratadas_v2`
+GROUP BY 1, 2
+
+/*Criando a tabela top_10_cidades*/
+CREATE OR REPLACE TABLE `projeto-vendas-influenciador.projeto_vendas.top_10_cidades` AS
+SELECT
+Localizacao_Pedido,
+SUM(Vendas_Totais) AS Total_Vendas_Cidade,
+COUNT(DISTINCT ID_Pedido) AS Total_Pedidos_Cidade
+FROM
+`projeto-vendas-influenciador.projeto_vendas.vendas_tratadas_v2`
+GROUP BY 1
+ORDER BY
+Total_Vendas_Cidade DESC
+LIMIT 10
+
+/*criando uma view unificada*/
+CREATE OR REPLACE VIEW `projeto-vendas-influenciador.projeto_vendas.dados_unificados` AS
+SELECT
+md.Mes,
+md.Receita_Total,
+md.Media_Avaliacao,
+md.Total_Pedidos,
+md.Envios_Internacionais,
+md.Envios_Nacionais,
+vpc.Categoria_Produto,
+vpc.Total_Vendas_Categoria,
+tc.Localizacao_Pedido,
+tc.Total_Vendas_Cidade,
+tc.Total_Pedidos_Cidade
+FROM
+`projeto-vendas-influenciador.projeto_vendas.metricas_dashboard` AS md
+LEFT JOIN
+`projeto-vendas-influenciador.projeto_vendas.vendas_por_categoria` AS vpc ON md.Mes = vpc.Mes
+LEFT JOIN
+`projeto-vendas-influenciador.projeto_vendas.top_10_cidades` AS tc ON md.Mes = vpc.Mes  -- Adapte o JOIN se necessário
+
+
+/*criando uma nova tabela vendas_ratadas_v3 com nova coluna Mes_Ordenacao*/
+CREATE OR REPLACE TABLE `projeto-vendas-influenciador.projeto_vendas.vendas_tratadas_v3` AS
+SELECT
+*,
+PARSE_DATE('%Y-%m', Mes) AS Mes_Data,  -- Converte 'Mes' para DATE
+CAST(SUBSTR(Mes, 1, 4) AS BIGNUMERIC) * 100 + CAST(SUBSTR(Mes, 6, 2) AS BIGNUMERIC) AS Mes_Ordenacao
+FROM
+`projeto-vendas-influenciador.projeto_vendas.vendas_tratadas_v2`;
+
+CREATE OR REPLACE TABLE `projeto-vendas-influenciador.projeto_vendas.metricas_dashboard_v2` AS
+SELECT
+*,
+PARSE_DATE('%Y-%m', Mes) AS Mes_Data, -- Converte 'Mes' para DATE
+CAST(SUBSTR(Mes, 1, 4) AS BIGNUMERIC) * 100 + CAST(SUBSTR(Mes, 6, 2) AS BIGNUMERIC) AS Mes_Ordenacao
+FROM
+`projeto-vendas-influenciador.projeto_vendas.metricas_dashboard`;
+
+

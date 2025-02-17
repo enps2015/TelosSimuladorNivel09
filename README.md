@@ -75,13 +75,41 @@ O relatório final em PDF (link aqui) apresenta uma análise detalhada dos dados
 
 ## 🖼️ Capturas de Tela
 
+![dashboard_pg01](https://github.com/enps2015/TelosSimuladorNivel09/blob/main/img/dashboard_p01.png)
+
+![dashboard_pg01](https://github.com/enps2015/TelosSimuladorNivel09/blob/main/img/dashboard_p02.png)
+
+![dashboard_pg01](https://github.com/enps2015/TelosSimuladorNivel09/blob/main/img/bigquery01.png)
+
+![dashboard_pg01](https://github.com/enps2015/TelosSimuladorNivel09/blob/main/img/google_sheet01.png)
+
+![dashboard_pg01](https://github.com/enps2015/TelosSimuladorNivel09/blob/main/img/tabelas_dashboard.png)
 
 
+
+## 👨‍💻 Autor
+---
+**Desenvolvido por:** Eric Pimentel  
+**"Do tamanho da sua fé, será o seu caminho." - Mestre Yoda 🚀 ✨**
+
+<div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+  <a href="https://www.linkedin.com/in/eric-np-santos/">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge">
+  </a>
+  <a href="https://github.com/enps2015">
+    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Badge">
+  </a>
+  <a href="https://www.instagram.com/eric.n.pimentel/">
+    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram Badge">
+  </a>
+</div>
 
 ---
 
-**Desenvolvido por:**
+> "Que a Força esteja com você!"
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/eric-np-santos/) Eric Pimentel 
+---
 
-**Que a Força dos Dados esteja com você! 🚀 ✨** 
+*🚀 Atualizado em: Fevereiro 2025*
+
+[Ver todos os projetos](https://github.com/enps2015?tab=repositories)
